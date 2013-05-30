@@ -56,12 +56,7 @@ namespace AStart
             return _transform;
         }
 
-        //return leng of the matrix/camera
-        //public float GetLength()
-        //{
-            //wolrd lenth = total size
-            //camera length = _pos.X
-        //}
+
 
     }
 }

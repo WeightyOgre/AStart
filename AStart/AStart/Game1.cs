@@ -25,6 +25,12 @@ namespace AStart
 
         Camera2D cam = new Camera2D();
 
+        float worldWidth = 1920;
+        float worldHeight = 1080;
+
+        //text output for testing purposes
+        SpriteFont Font1;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -43,6 +49,8 @@ namespace AStart
             graphics.PreferredBackBufferHeight = 1080;
             //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+
+            Font1 = Content.Load<SpriteFont>("SpriteFont1");
 
             base.Initialize();
         }
@@ -79,9 +87,9 @@ namespace AStart
 
             if (Keyboard.GetState().IsKeyDown(Keys.W) == true)
             {
-                if (cam._pos.Y < 0)
+                if (cam._pos.Y <= 0)
                 {
-
+                    
                 }
                 else
                 {
@@ -91,9 +99,9 @@ namespace AStart
             }
             if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
             {
-                if (cam._pos.Y > 1280)
+                if ((GraphicsDevice.Viewport.Height / cam.Zoom) > worldHeight - cam._pos.Y)
                 {
-
+                    
                 }
                 else
                 {
@@ -105,7 +113,7 @@ namespace AStart
             if (Keyboard.GetState().IsKeyDown(Keys.A) == true)
             {
                 
-                if (cam._pos.X < 0)
+                if (cam._pos.X <= 0)
                 {
                     
                 }
@@ -116,7 +124,7 @@ namespace AStart
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
             {
-                if (cam._pos.X > 1920)
+                if ((GraphicsDevice.Viewport.Width / cam.Zoom) > worldWidth - cam._pos.X)
                 {
 
                 }
@@ -133,14 +141,9 @@ namespace AStart
             //zoom out
             if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
             {
-                if (cam.Zoom < 1.1f)
-                {
 
-                }
-                else
-                {
                     cam.Zoom = cam.Zoom -= 0.1f;
-                }
+
             }
         }
 
@@ -151,7 +154,7 @@ namespace AStart
 
             // TODO: Add your drawing code here
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
+            spriteBatch.Begin(SpriteSortMode.Texture,
                         BlendState.AlphaBlend,
                         null,
                         null,
@@ -162,10 +165,25 @@ namespace AStart
             // Draw Everything
             // You can draw everything in their positions since the cam matrix has already done the maths for you 
 
+            //spriteBatch.DrawString(
+            spriteBatch.Draw(aTexture, new Vector2(500, 200), Color.Red);
             spriteBatch.Draw(aTexture, aTexturePosition, Color.Black);
-            spriteBatch.Draw(aTexture, new Vector2(500.0f, 200.0f), Color.Red);
+                        
             spriteBatch.Draw(backgroundTexture, backgroundTexturePosition, Color.White);
+            
             spriteBatch.End();
+
+            SpriteBatch testBatch = new SpriteBatch(GraphicsDevice);
+            testBatch.Begin();
+            testBatch.DrawString(Font1,
+                                "camera Y value = " + cam._pos.Y +
+                                " camera X value = " + cam._pos.X +
+                                " viewport width = " + GraphicsDevice.Viewport.Width/cam.Zoom +
+                                " viewport height = " + GraphicsDevice.Viewport.Height/cam.Zoom +
+                                " world height take away cam.y value = " + (worldHeight - cam._pos.Y),
+                                new Vector2(100, 100),
+                                Color.Black);
+            testBatch.End();
 
             base.Draw(gameTime);
         }
