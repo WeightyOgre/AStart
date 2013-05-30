@@ -99,7 +99,7 @@ namespace AStart
             }
             if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
             {
-                if ((GraphicsDevice.Viewport.Height / cam.Zoom) > worldHeight - cam._pos.Y)
+                if ((GraphicsDevice.Viewport.Height / cam.Zoom) >= worldHeight - cam._pos.Y)
                 {
                     
                 }
@@ -124,7 +124,7 @@ namespace AStart
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
             {
-                if ((GraphicsDevice.Viewport.Width / cam.Zoom) > worldWidth - cam._pos.X)
+                if ((GraphicsDevice.Viewport.Width / cam.Zoom) >= worldWidth - cam._pos.X)
                 {
 
                 }
