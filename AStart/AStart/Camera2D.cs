@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace AStart
 {
@@ -13,6 +14,9 @@ namespace AStart
         public Matrix             _transform; // Matrix Transform
         public Vector2          _pos; // Camera Position
         protected float         _rotation; // Camera Rotation
+
+        const float worldWidth = 1920;
+        const float worldHeight = 1080;
  
         public void Camera2d()
         {
@@ -56,7 +60,80 @@ namespace AStart
             return _transform;
         }
 
+        public void UpdateCameraInput(GraphicsDevice graphicsDevice)
+        {
+            KeyboardState currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
 
+
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W) == true)
+            {
+                if (_pos.Y <= 0)
+                {
+
+                }
+                else
+                {
+                    _pos.Y = Pos.Y + -1;
+                }
+
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
+            {
+                if ((graphicsDevice.Viewport.Height / Zoom) >= worldHeight - _pos.Y)
+                {
+
+                }
+                else
+                {
+                    _pos.Y = Pos.Y + 1;
+                }
+
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A) == true)
+            {
+
+                if (_pos.X <= 0)
+                {
+
+                }
+                else
+                {
+                    _pos.X = Pos.X - 1;
+                }
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
+            {
+                if ((graphicsDevice.Viewport.Width / Zoom) >= worldWidth - _pos.X)
+                {
+
+                }
+                else
+                {
+                    _pos.X = Pos.X + 1;
+                }
+            }
+
+            //zoom in
+            if (Keyboard.GetState().IsKeyDown(Keys.X) == true)
+            {
+                if (Zoom <= 5.0f)
+                {
+                    Zoom = Zoom += 1.1f;
+                }
+            }
+
+            //zoom out
+            if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
+            {
+                if (Zoom >= 1.1f)
+                {
+                    Zoom = Zoom -= 0.1f;
+                }
+            }
+        }
 
     }
 }

@@ -25,12 +25,6 @@ namespace AStart
 
         Camera2D cam = new Camera2D();
 
-        const float worldWidth = 1920;
-        const float worldHeight = 1080;
-
-        //text output for testing purposes
-        SpriteFont Font1;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,7 +33,7 @@ namespace AStart
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+
             aTexturePosition = new Vector2(0, 0);
             cam.Pos = new Vector2(0,0);
             cam.Zoom = 1f; 
@@ -49,8 +43,6 @@ namespace AStart
             graphics.PreferredBackBufferHeight = 1080;
             //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
-
-            Font1 = Content.Load<SpriteFont>("SpriteFont1");
 
             base.Initialize();
         }
@@ -73,86 +65,10 @@ namespace AStart
         protected override void Update(GameTime gameTime)
         {
 
-            UpdateCameraInput();
+            cam.UpdateCameraInput(GraphicsDevice);
 
             base.Update(gameTime);
         }
-
-        protected void UpdateCameraInput()
-        {
-            KeyboardState currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            
-
-            if (Keyboard.GetState().IsKeyDown(Keys.W) == true)
-            {
-                if (cam._pos.Y <= 0)
-                {
-                    
-                }
-                else
-                {
-                    cam._pos.Y = cam.Pos.Y + -1;
-                }
-                
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
-            {
-                if ((GraphicsDevice.Viewport.Height / cam.Zoom) >= worldHeight - cam._pos.Y)
-                {
-                    
-                }
-                else
-                {
-                    cam._pos.Y = cam.Pos.Y + 1;
-                }
-                
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.A) == true)
-            {
-                
-                if (cam._pos.X <= 0)
-                {
-                    
-                }
-                else
-                {
-                    cam._pos.X = cam.Pos.X - 1;
-                }
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
-            {
-                if ((GraphicsDevice.Viewport.Width / cam.Zoom) >= worldWidth - cam._pos.X)
-                {
-
-                }
-                else
-                {
-                    cam._pos.X = cam.Pos.X + 1;
-                }
-            }
-
-            //zoom in
-            if (Keyboard.GetState().IsKeyDown(Keys.X) == true)
-            {
-                if (cam.Zoom <= 5.0f)
-                {
-                    cam.Zoom = cam.Zoom += 1.1f;
-                }
-            }
-
-            //zoom out
-            if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
-            {
-                if (cam.Zoom >= 1.1f)
-                {
-                    cam.Zoom = cam.Zoom -= 0.1f;
-                }
-            }
-        }
-
 
         protected override void Draw(GameTime gameTime)
         {
@@ -172,19 +88,6 @@ namespace AStart
             spriteBatch.Draw(backgroundTexture, backgroundTexturePosition, Color.White);
             
             spriteBatch.End();
-
-            SpriteBatch testBatch = new SpriteBatch(GraphicsDevice);
-            testBatch.Begin();
-            testBatch.DrawString(Font1,
-                                "camera Y value = " + cam._pos.Y +
-                                " camera X value = " + cam._pos.X +
-                                " viewport width = " + GraphicsDevice.Viewport.Width/cam.Zoom +
-                                " viewport height = " + GraphicsDevice.Viewport.Height/cam.Zoom +
-                                " world height take away cam.y value = " + (worldHeight - cam._pos.Y) +
-                                " Zoom" + cam.Zoom,
-                                new Vector2(100, 100),
-                                Color.Black);
-            testBatch.End();
 
             base.Draw(gameTime);
         }
