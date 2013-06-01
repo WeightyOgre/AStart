@@ -25,8 +25,8 @@ namespace AStart
 
         Camera2D cam = new Camera2D();
 
-        float worldWidth = 1920;
-        float worldHeight = 1080;
+        const float worldWidth = 1920;
+        const float worldHeight = 1080;
 
         //text output for testing purposes
         SpriteFont Font1;
@@ -42,7 +42,7 @@ namespace AStart
             // TODO: Add your initialization logic here
             aTexturePosition = new Vector2(0, 0);
             cam.Pos = new Vector2(0,0);
-            cam.Zoom += 1f; 
+            cam.Zoom = 1f; 
             backgroundTexturePosition = new Vector2(0, 0);
 
             graphics.PreferredBackBufferWidth = 1920;
@@ -134,16 +134,22 @@ namespace AStart
                 }
             }
 
+            //zoom in
             if (Keyboard.GetState().IsKeyDown(Keys.X) == true)
             {
-                cam.Zoom = cam.Zoom += 0.1f; 
+                if (cam.Zoom <= 5.0f)
+                {
+                    cam.Zoom = cam.Zoom += 1.1f;
+                }
             }
+
             //zoom out
             if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
             {
-
+                if (cam.Zoom >= 1.1f)
+                {
                     cam.Zoom = cam.Zoom -= 0.1f;
-
+                }
             }
         }
 
@@ -151,8 +157,6 @@ namespace AStart
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
 
             spriteBatch.Begin(SpriteSortMode.Texture,
                         BlendState.AlphaBlend,
@@ -162,10 +166,6 @@ namespace AStart
                         null,
                         cam.get_transformation(GraphicsDevice));
 
-            // Draw Everything
-            // You can draw everything in their positions since the cam matrix has already done the maths for you 
-
-            //spriteBatch.DrawString(
             spriteBatch.Draw(aTexture, new Vector2(500, 200), Color.Red);
             spriteBatch.Draw(aTexture, aTexturePosition, Color.Black);
                         
@@ -180,7 +180,8 @@ namespace AStart
                                 " camera X value = " + cam._pos.X +
                                 " viewport width = " + GraphicsDevice.Viewport.Width/cam.Zoom +
                                 " viewport height = " + GraphicsDevice.Viewport.Height/cam.Zoom +
-                                " world height take away cam.y value = " + (worldHeight - cam._pos.Y),
+                                " world height take away cam.y value = " + (worldHeight - cam._pos.Y) +
+                                " Zoom" + cam.Zoom,
                                 new Vector2(100, 100),
                                 Color.Black);
             testBatch.End();
