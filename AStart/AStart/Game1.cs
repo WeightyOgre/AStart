@@ -23,20 +23,23 @@ namespace AStart
         Texture2D backgroundTexture;
         Vector2 backgroundTexturePosition;
 
-        Camera2D cam = new Camera2D();
+        Camera2D cam;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            
         }
 
         protected override void Initialize()
         {
+            
+            
+            cam = new Camera2D();
 
             aTexturePosition = new Vector2(0, 0);
-            cam.Pos = new Vector2(0,0);
-            cam.Zoom = 1f; 
+                         
             backgroundTexturePosition = new Vector2(0, 0);
 
             graphics.PreferredBackBufferWidth = 1920;
@@ -50,16 +53,9 @@ namespace AStart
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             aTexture = Content.Load<Texture2D>("blank20x20");
             backgroundTexture = Content.Load<Texture2D>("background1920x1080");
-            // TODO: use this.Content to load your game content here
-        }
-
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
         }
 
         protected override void Update(GameTime gameTime)

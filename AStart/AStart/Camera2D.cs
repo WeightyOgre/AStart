@@ -10,54 +10,60 @@ namespace AStart
 {
     class Camera2D
     {
-        protected float          _zoom; // Camera Zoom
-        public Matrix             _transform; // Matrix Transform
-        public Vector2          _pos; // Camera Position
-        protected float         _rotation; // Camera Rotation
+        //camera variables
+        protected float          zoom; // Camera Zoom
+        public Matrix             transform; // Matrix Transform
+        public Vector2          pos; // Camera Position
+        protected const float rotation = 0.0f; // Camera Rotation
+        protected float cameraSpeed;
+        protected float maxZoom;
+        protected float minZoom;
+        protected float zoomSpeed;
 
-        const float worldWidth = 1920;
-        const float worldHeight = 1080;
- 
-        public void Camera2d()
+        //world variables
+        protected float worldWidth;
+        protected float worldHeight;
+        protected float minWorldWidth;
+        protected float minWorldHeight;
+
+        public Camera2D()
         {
-            _zoom = 0.0f;
-            _rotation = 0.0f;
-            _pos = Vector2.Zero;
+            //camera 
+            Zoom = 1f;
+            cameraSpeed = 1f;
+            maxZoom = 5.0f;
+            minZoom = 1.1f;
+            zoomSpeed = 2.1f;
+
+            //world
+            worldWidth = 1920;
+            worldHeight = 1080;
+            minWorldWidth = 0;
+            minWorldHeight = 0;
         }
 
         // Sets and gets zoom
         public float Zoom
         {
-            get { return _zoom; }
-            set { _zoom = value; if (_zoom < 0.1f) _zoom = 0.1f; } // Negative zoom will flip image
+            get { return zoom; }
+            set { zoom = value; } // Negative zoom will flip image
         }
 
-        public float Rotation
-        {
-            get { return _rotation; }
-            set { _rotation = value; }
-        }
-
-        // Auxiliary function to move the camera
-        public void Move(Vector2 amount)
-        {
-            _pos += amount;
-        }
         // Get set position
         public Vector2 Pos
         {
-            get { return _pos; }
-            set { _pos = value; }
+            get { return pos; }
+            set { pos = value; }
         }
 
         public Matrix get_transformation(GraphicsDevice graphicsDevice)
         {
-            _transform =       // Thanks to o KB o for this solution
-              Matrix.CreateTranslation(new Vector3(-_pos.X, -_pos.Y, 0)) *
-                                         Matrix.CreateRotationZ(Rotation) *
+            transform =       // Thanks to o KB o for this solution
+              Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *
+                                         Matrix.CreateRotationZ(rotation) *
                                          Matrix.CreateScale(new Vector3(Zoom, Zoom, 0)) *
                                          Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.0f, graphicsDevice.Viewport.Height * 0.0f, 0));
-            return _transform;
+            return transform;
         }
 
         public void UpdateCameraInput(GraphicsDevice graphicsDevice)
@@ -65,72 +71,52 @@ namespace AStart
             KeyboardState currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-
-
+            //move up
             if (Keyboard.GetState().IsKeyDown(Keys.W) == true)
             {
-                if (_pos.Y <= 0)
+                if (pos.Y > minWorldHeight)
                 {
-
+                    pos.Y = Pos.Y - cameraSpeed;
                 }
-                else
-                {
-                    _pos.Y = Pos.Y + -1;
-                }
-
             }
+            //move down
             if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
             {
-                if ((graphicsDevice.Viewport.Height / Zoom) >= worldHeight - _pos.Y)
+                if ((graphicsDevice.Viewport.Height / Zoom) < worldHeight - pos.Y)
                 {
-
+                    pos.Y = Pos.Y + cameraSpeed;
                 }
-                else
-                {
-                    _pos.Y = Pos.Y + 1;
-                }
-
             }
-
+            //move left
             if (Keyboard.GetState().IsKeyDown(Keys.A) == true)
             {
-
-                if (_pos.X <= 0)
+                if (pos.X > minWorldWidth)
                 {
-
-                }
-                else
-                {
-                    _pos.X = Pos.X - 1;
+                    pos.X = Pos.X - cameraSpeed;
                 }
             }
+            //move right
             if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
             {
-                if ((graphicsDevice.Viewport.Width / Zoom) >= worldWidth - _pos.X)
+                if ((graphicsDevice.Viewport.Width / Zoom) < worldWidth - pos.X)
                 {
-
-                }
-                else
-                {
-                    _pos.X = Pos.X + 1;
+                    pos.X = Pos.X + cameraSpeed;
                 }
             }
-
             //zoom in
             if (Keyboard.GetState().IsKeyDown(Keys.X) == true)
             {
-                if (Zoom <= 5.0f)
+                if (Zoom <= maxZoom)
                 {
-                    Zoom = Zoom += 1.1f;
+                    Zoom = Zoom += zoomSpeed;
                 }
             }
-
             //zoom out
             if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
             {
-                if (Zoom >= 1.1f)
+                if (Zoom >= minZoom)
                 {
-                    Zoom = Zoom -= 0.1f;
+                    Zoom = Zoom -= zoomSpeed;
                 }
             }
         }
