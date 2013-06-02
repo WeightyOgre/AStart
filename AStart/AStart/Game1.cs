@@ -18,10 +18,7 @@ namespace AStart
         SpriteBatch spriteBatch;
 
         Texture2D aTexture;
-        Vector2 aTexturePosition;
-
         Texture2D backgroundTexture;
-        Vector2 backgroundTexturePosition;
 
         Camera2D cam;
 
@@ -32,12 +29,14 @@ namespace AStart
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            input = new Input();
         }
 
         protected override void Initialize()
         {
+            //screen resolution
+            int viewportWidth = 1920;
+            int viewportHeight = 1080;
+            
             //pass the camera2d constructor the following values for behaviour
             //camera 
             float Zoom = 1f;
@@ -51,15 +50,17 @@ namespace AStart
             float worldHeight = 1080;
             float minWorldWidth = 0;
             float minWorldHeight = 0;
-            cam = new Camera2D(Zoom, cameraSpeed, maxZoom, minZoom, zoomSpeed, worldWidth, worldHeight, minWorldWidth, minWorldHeight, GraphicsDevice);
 
-            aTexturePosition = new Vector2(0, 0);
-                         
-            backgroundTexturePosition = new Vector2(0, 0);
+            //create the camera passing in the values
+            cam = new Camera2D(Zoom, cameraSpeed, maxZoom, minZoom, zoomSpeed, worldWidth, worldHeight, minWorldWidth, minWorldHeight, viewportWidth, viewportHeight);
 
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
-            //graphics.IsFullScreen = true;
+            //create the input object
+            input = new Input();
+
+            //set up the viewport to match screen resolution and set to full screen
+            graphics.PreferredBackBufferWidth = viewportWidth;
+            graphics.PreferredBackBufferHeight = viewportHeight;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             base.Initialize();
@@ -75,7 +76,12 @@ namespace AStart
         protected override void Update(GameTime gameTime)
         {
             cam.moveCamera(input.getCameraInput());
-            //cam.updatePosition();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape) == true)
+            {
+                this.Exit();
+            }
+
             base.Update(gameTime);
         }
 
@@ -83,7 +89,7 @@ namespace AStart
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.Texture,
+            spriteBatch.Begin(SpriteSortMode.Deferred,
                         BlendState.AlphaBlend,
                         null,
                         null,
@@ -91,11 +97,9 @@ namespace AStart
                         null,
                         cam.get_transformation());
 
+            spriteBatch.Draw(backgroundTexture, new Vector2(0, 0), Color.White);
             spriteBatch.Draw(aTexture, new Vector2(500, 200), Color.Red);
-            spriteBatch.Draw(aTexture, aTexturePosition, Color.Black);
-                        
-            spriteBatch.Draw(backgroundTexture, backgroundTexturePosition, Color.White);
-            
+            spriteBatch.Draw(aTexture, new Vector2(0, 0), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);

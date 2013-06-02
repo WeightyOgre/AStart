@@ -19,6 +19,8 @@ namespace AStart
         protected float maxZoom;
         protected float minZoom;
         protected float zoomSpeed;
+        protected int viewportWidth;
+        protected int viewportHeight;
 
         //world variables
         protected float worldWidth;
@@ -26,9 +28,7 @@ namespace AStart
         protected float minWorldWidth;
         protected float minWorldHeight;
 
-        GraphicsDevice graphicsDevice;
-
-        public Camera2D(float Zoom, float cameraSpeed, float maxZoom, float minZoom, float zoomSpeed, float worldWidth, float worldHeight, float minWorldWidth, float minWorldHeight, GraphicsDevice graphicsDevice)
+        public Camera2D(float Zoom, float cameraSpeed, float maxZoom, float minZoom, float zoomSpeed, float worldWidth, float worldHeight, float minWorldWidth, float minWorldHeight, int viewportWidth, int viewportHeight)
         {
             //camera 
             this.Zoom = Zoom;
@@ -36,6 +36,8 @@ namespace AStart
             this.maxZoom = maxZoom;
             this.minZoom = minZoom;
             this.zoomSpeed = zoomSpeed;
+            this.viewportWidth = viewportWidth;
+            this.viewportHeight = viewportHeight;
 
             //world
             this.worldWidth = worldWidth;
@@ -43,7 +45,6 @@ namespace AStart
             this.minWorldWidth = minWorldWidth;
             this.minWorldHeight = minWorldHeight;
 
-            this.graphicsDevice = graphicsDevice;
         }
 
         // Sets and gets zoom
@@ -66,7 +67,7 @@ namespace AStart
               Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *
                                          Matrix.CreateRotationZ(rotation) *
                                          Matrix.CreateScale(new Vector3(Zoom, Zoom, 0)) *
-                                         Matrix.CreateTranslation(new Vector3(graphicsDevice.Viewport.Width * 0.0f, graphicsDevice.Viewport.Height * 0.0f, 0));
+                                         Matrix.CreateTranslation(new Vector3(worldWidth * 0.0f, worldHeight * 0.0f, 0));
             return transform;
         }
 
@@ -110,10 +111,10 @@ namespace AStart
         public void moveCameraDown()
         {
             //move down
-                if ((graphicsDevice.Viewport.Height / Zoom) < worldHeight - pos.Y)
-                {
-                    pos.Y = Pos.Y + cameraSpeed;
-                }
+            if ((viewportHeight / Zoom) < worldHeight - pos.Y)
+            {
+                pos.Y = Pos.Y + cameraSpeed;
+            }
         }
 
         public void moveCameraLeft()
@@ -128,7 +129,7 @@ namespace AStart
         public void moveCameraRight()
         {
             //move right
-                if ((graphicsDevice.Viewport.Width / Zoom) < worldWidth - pos.X)
+                if ((viewportWidth / Zoom) < worldWidth - pos.X)
                 {
                     pos.X = Pos.X + cameraSpeed;
                 }
@@ -158,12 +159,11 @@ namespace AStart
         public void updatePosition()
         {
             //auto updates camera after a zoom out.
-            while ((graphicsDevice.Viewport.Width / Zoom) > (worldWidth - pos.X))
+            while ((viewportWidth / Zoom) > (worldWidth - pos.X))
             {
-
                 pos.X--;
             }
-            while ((graphicsDevice.Viewport.Height / Zoom) > worldHeight - pos.Y)
+            while ((viewportHeight / Zoom) > worldHeight - pos.Y)
             {
                 pos.Y--;
             }
