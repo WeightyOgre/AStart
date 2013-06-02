@@ -26,20 +26,24 @@ namespace AStart
         protected float minWorldWidth;
         protected float minWorldHeight;
 
-        public Camera2D()
+        GraphicsDevice graphicsDevice;
+
+        public Camera2D(float Zoom, float cameraSpeed, float maxZoom, float minZoom, float zoomSpeed, float worldWidth, float worldHeight, float minWorldWidth, float minWorldHeight, GraphicsDevice graphicsDevice)
         {
             //camera 
-            Zoom = 1f;
-            cameraSpeed = 1f;
-            maxZoom = 5.0f;
-            minZoom = 1.1f;
-            zoomSpeed = 2.1f;
+            this.Zoom = Zoom;
+            this.cameraSpeed = cameraSpeed;
+            this.maxZoom = maxZoom;
+            this.minZoom = minZoom;
+            this.zoomSpeed = zoomSpeed;
 
             //world
-            worldWidth = 1920;
-            worldHeight = 1080;
-            minWorldWidth = 0;
-            minWorldHeight = 0;
+            this.worldWidth = worldWidth;
+            this.worldHeight = worldHeight;
+            this.minWorldWidth = minWorldWidth;
+            this.minWorldHeight = minWorldHeight;
+
+            this.graphicsDevice = graphicsDevice;
         }
 
         // Sets and gets zoom
@@ -56,7 +60,7 @@ namespace AStart
             set { pos = value; }
         }
 
-        public Matrix get_transformation(GraphicsDevice graphicsDevice)
+        public Matrix get_transformation()
         {
             transform =       // Thanks to o KB o for this solution
               Matrix.CreateTranslation(new Vector3(-pos.X, -pos.Y, 0)) *
@@ -66,59 +70,86 @@ namespace AStart
             return transform;
         }
 
-        public void UpdateCameraInput(GraphicsDevice graphicsDevice)
+        public void moveCamera(int direction)
         {
-            KeyboardState currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-
-            //move up
-            if (Keyboard.GetState().IsKeyDown(Keys.W) == true)
+            switch (direction)
             {
+                case 1:
+                    moveCameraUp();
+                    break;
+                case 2:
+                    moveCameraDown();
+                    break;
+                case 3:
+                    moveCameraLeft();
+                    break;
+                case 4:
+                    moveCameraRight();
+                    break;
+                case 5:
+                    zoomIn();
+                    break;
+                case 6:
+                    zoomOut();
+                    break;
+                default:
+                    //do nothing
+                    break;
+            }
+        }
+
+        public void moveCameraUp()
+        {
+            //move up
                 if (pos.Y > minWorldHeight)
                 {
                     pos.Y = Pos.Y - cameraSpeed;
                 }
-            }
+        }
+
+        public void moveCameraDown()
+        {
             //move down
-            if (Keyboard.GetState().IsKeyDown(Keys.S) == true)
-            {
                 if ((graphicsDevice.Viewport.Height / Zoom) < worldHeight - pos.Y)
                 {
                     pos.Y = Pos.Y + cameraSpeed;
                 }
-            }
+        }
+
+        public void moveCameraLeft()
+        {
             //move left
-            if (Keyboard.GetState().IsKeyDown(Keys.A) == true)
-            {
                 if (pos.X > minWorldWidth)
                 {
                     pos.X = Pos.X - cameraSpeed;
                 }
-            }
+        }
+
+        public void moveCameraRight()
+        {
             //move right
-            if (Keyboard.GetState().IsKeyDown(Keys.D) == true)
-            {
                 if ((graphicsDevice.Viewport.Width / Zoom) < worldWidth - pos.X)
                 {
                     pos.X = Pos.X + cameraSpeed;
                 }
-            }
+        }
+
+        public void zoomIn()
+        {
             //zoom in
-            if (Keyboard.GetState().IsKeyDown(Keys.X) == true)
-            {
                 if (Zoom <= maxZoom)
                 {
                     Zoom = Zoom += zoomSpeed;
                 }
-            }
+        }
+
+        public void zoomOut()
+        {
             //zoom out
-            if (Keyboard.GetState().IsKeyDown(Keys.Z) == true)
-            {
                 if (Zoom >= minZoom)
                 {
                     Zoom = Zoom -= zoomSpeed;
                 }
-            }
         }
 
     }

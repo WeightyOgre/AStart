@@ -25,18 +25,33 @@ namespace AStart
 
         Camera2D cam;
 
+        //handles all game input
+        Input input;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            
+
+            input = new Input();
         }
 
         protected override void Initialize()
         {
-            
-            
-            cam = new Camera2D();
+            //pass the camera2d constructor the following values for behaviour
+            //camera 
+            float Zoom = 1f;
+            float cameraSpeed = 1f;
+            float maxZoom = 5.0f;
+            float minZoom = 1.1f;
+            float zoomSpeed = 2.1f;
+
+            //world
+            float worldWidth = 1920;
+            float worldHeight = 1080;
+            float minWorldWidth = 0;
+            float minWorldHeight = 0;
+            cam = new Camera2D(Zoom, cameraSpeed, maxZoom, minZoom, zoomSpeed, worldWidth, worldHeight, minWorldWidth, minWorldHeight, GraphicsDevice);
 
             aTexturePosition = new Vector2(0, 0);
                          
@@ -50,7 +65,6 @@ namespace AStart
             base.Initialize();
         }
 
-
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -60,8 +74,7 @@ namespace AStart
 
         protected override void Update(GameTime gameTime)
         {
-
-            cam.UpdateCameraInput(GraphicsDevice);
+            cam.moveCamera(input.getCameraInput());
 
             base.Update(gameTime);
         }
@@ -76,7 +89,7 @@ namespace AStart
                         null,
                         null,
                         null,
-                        cam.get_transformation(GraphicsDevice));
+                        cam.get_transformation());
 
             spriteBatch.Draw(aTexture, new Vector2(500, 200), Color.Red);
             spriteBatch.Draw(aTexture, aTexturePosition, Color.Black);
