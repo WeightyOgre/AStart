@@ -150,6 +150,23 @@ namespace AStart
                 {
                     Zoom = Zoom -= zoomSpeed;
                 }
+
+                updatePosition();    
+
+        }
+
+        public void updatePosition()
+        {
+            //auto updates camera after a zoom out.
+            while ((graphicsDevice.Viewport.Width / Zoom) > (worldWidth - pos.X))
+            {
+
+                pos.X--;
+            }
+            while ((graphicsDevice.Viewport.Height / Zoom) > worldHeight - pos.Y)
+            {
+                pos.Y--;
+            }
         }
 
     }

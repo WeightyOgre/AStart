@@ -75,7 +75,7 @@ namespace AStart
         protected override void Update(GameTime gameTime)
         {
             cam.moveCamera(input.getCameraInput());
-
+            //cam.updatePosition();
             base.Update(gameTime);
         }
 

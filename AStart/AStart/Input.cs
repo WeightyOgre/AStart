@@ -16,37 +16,37 @@ namespace AStart
 
             if (currentKeyboardState.IsKeyDown(Keys.W) == true)
             {
-                //flips game state between game and menu
+                //move up
                 return 1;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.S) == true)
             {
-                //flips game state between game and menu
+                //move down
                 return 2;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.A) == true)
             {
-                //flips game state between game and menu
+                //move left
                 return 3;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.D) == true)
             {
-                //flips game state between game and menu
+                //move right
                 return 4;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Z) == true)
             {
-                //flips game state between game and menu
+                //zoom in
                 return 5;
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.X) == true)
             {
-                //flips game state between game and menu
+                //zoom out
                 return 6;
             }
 
