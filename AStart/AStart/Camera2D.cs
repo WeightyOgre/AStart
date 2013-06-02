@@ -142,6 +142,7 @@ namespace AStart
                 {
                     Zoom = Zoom += zoomSpeed;
                 }
+                updatePosition();
         }
 
         public void zoomOut()
@@ -166,6 +167,14 @@ namespace AStart
             while ((viewportHeight / Zoom) > worldHeight - pos.Y)
             {
                 pos.Y--;
+            }
+            while (pos.X < minWorldWidth)
+            {
+                pos.X++;
+            }
+            while (pos.Y < minWorldHeight)
+            {
+                pos.Y++;
             }
         }
 
