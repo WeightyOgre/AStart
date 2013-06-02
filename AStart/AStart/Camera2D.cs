@@ -28,6 +28,10 @@ namespace AStart
         protected float minWorldWidth;
         protected float minWorldHeight;
 
+        //test 
+        int test;
+        int test2;
+
         public Camera2D(float Zoom, float cameraSpeed, float maxZoom, float minZoom, float zoomSpeed, float worldWidth, float worldHeight, float minWorldWidth, float minWorldHeight, int viewportWidth, int viewportHeight)
         {
             //camera 
@@ -44,7 +48,22 @@ namespace AStart
             this.worldHeight = worldHeight;
             this.minWorldWidth = minWorldWidth;
             this.minWorldHeight = minWorldHeight;
+            Test = 0;
+            Test2 = 0;
+        }
 
+        // Sets and gets test
+        public int Test
+        {
+            get { return test; }
+            set { test = value; } // Negative zoom will flip image
+        }
+
+        // Sets and gets test2
+        public int Test2
+        {
+            get { return test2; }
+            set { test2 = value; } // Negative zoom will flip image
         }
 
         // Sets and gets zoom
@@ -105,6 +124,7 @@ namespace AStart
                 if (pos.Y > minWorldHeight)
                 {
                     pos.Y = Pos.Y - cameraSpeed;
+                    Test2 -= Convert.ToInt32(cameraSpeed);
                 }
         }
 
@@ -114,6 +134,7 @@ namespace AStart
             if ((viewportHeight / Zoom) < worldHeight - pos.Y)
             {
                 pos.Y = Pos.Y + cameraSpeed;
+                Test2 += Convert.ToInt32(cameraSpeed);
             }
         }
 
@@ -123,6 +144,7 @@ namespace AStart
                 if (pos.X > minWorldWidth)
                 {
                     pos.X = Pos.X - cameraSpeed;
+                    Test -= Convert.ToInt32(cameraSpeed);
                 }
         }
 
@@ -132,6 +154,7 @@ namespace AStart
                 if ((viewportWidth / Zoom) < worldWidth - pos.X)
                 {
                     pos.X = Pos.X + cameraSpeed;
+                    Test += Convert.ToInt32(cameraSpeed);
                 }
         }
 
@@ -163,18 +186,22 @@ namespace AStart
             while ((viewportWidth / Zoom) > (worldWidth - pos.X))
             {
                 pos.X--;
+                Test--;
             }
             while ((viewportHeight / Zoom) > worldHeight - pos.Y)
             {
                 pos.Y--;
+                Test2--;
             }
             while (pos.X < minWorldWidth)
             {
                 pos.X++;
+                Test++;
             }
             while (pos.Y < minWorldHeight)
             {
                 pos.Y++;
+                Test2++;
             }
         }
 

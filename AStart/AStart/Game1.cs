@@ -54,7 +54,7 @@ namespace AStart
             float cameraSpeed = 1f;
             float maxZoom = 5.0f;
             float minZoom = 1.1f;
-            float zoomSpeed = 1.1f;
+            float zoomSpeed = 0.5f;
 
             //world
             float worldWidth = 1920;
@@ -116,13 +116,13 @@ namespace AStart
             if (mouseState.LeftButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
             {
                 aColor = Color.Black;
-                Rectangle mouseClickArea = new Rectangle(Convert.ToInt32(mouseState.X / cam.Zoom), Convert.ToInt32(mouseState.Y /cam.Zoom), Convert.ToInt32(20/cam.Zoom),Convert.ToInt32(20/cam.Zoom));
+                Rectangle mouseClickArea = new Rectangle(Convert.ToInt32((mouseState.X / cam.Zoom) + cam.Test), Convert.ToInt32((mouseState.Y / cam.Zoom) + cam.Test2), Convert.ToInt32(20 / cam.Zoom), Convert.ToInt32(20 / cam.Zoom));
                 
                 Rectangle textureRectangle = new Rectangle(Convert.ToInt32(mouseTexturePosition.X),Convert.ToInt32(mouseTexturePosition.Y),aTexture.Width,aTexture.Height);
                 if (mouseClickArea.Intersects(textureRectangle))
                 {
-                    mouseTexturePosition.X = mouseState.X/cam.Zoom;
-                    mouseTexturePosition.Y = mouseState.Y/cam.Zoom;
+                    mouseTexturePosition.X = (mouseState.X/cam.Zoom) + cam.Test;
+                    mouseTexturePosition.Y = mouseState.Y/cam.Zoom + cam.Test2;
                 }
             }
             //right mouse click
@@ -163,13 +163,18 @@ namespace AStart
             spriteBatch.End();
 
             SpriteBatch testBatch = new SpriteBatch(GraphicsDevice);
-            testBatch.Begin();
-            testBatch.DrawString(Font1,
-                                "Mouse X value = " + (mouseState.X / cam.Zoom) +
-                                " Mouse Y = " + (mouseState.Y / cam.Zoom),
-                                new Vector2(100, 100),
-                                Color.Black);
-            testBatch.End();
+            //testBatch.Begin();
+            //testBatch.DrawString(Font1,
+                                //"Mouse X value = " + Convert.ToInt32((mouseState.X / cam.Zoom)) +
+                                 
+                                //"| Test = " + cam.Test +
+                                //"| Mouse X + Test =" + Convert.ToInt32((mouseState.X / cam.Zoom) + cam.Test) +
+                                //"| Mouse Y = " + Convert.ToInt32((mouseState.Y / cam.Zoom)) +
+                                //"| Test2 = " + cam.Test2 +
+                                //"| Mouse Y + Test 2 = " + Convert.ToInt32((mouseState.Y / cam.Zoom) + cam.Test2),
+                                //new Vector2(100, 100),
+                                //Color.Black);
+            //testBatch.End();
 
 
             base.Draw(gameTime);
