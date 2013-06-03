@@ -32,8 +32,6 @@ namespace AStart
         //text output for testing purposes
         SpriteFont Font1;
 
-        MouseState mouseState;
-
         Vector2 mouseTexturePosition;
 
         public Game1()
@@ -71,7 +69,7 @@ namespace AStart
             //set up the viewport to match screen resolution and set to full screen
             graphics.PreferredBackBufferWidth = viewportWidth;
             graphics.PreferredBackBufferHeight = viewportHeight;
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             this.IsMouseVisible = true;
@@ -96,12 +94,14 @@ namespace AStart
 
         protected override void Update(GameTime gameTime)
         {
-            cam.moveCamera(input.getCameraInput());
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape) == true)
             {
                 this.Exit();
             }
+            
+            cam.moveCamera(input.getCameraInput());
+            
                        
             updateMouse();
 
@@ -110,37 +110,32 @@ namespace AStart
 
         public void updateMouse()
         {
-            mouseState = Mouse.GetState();
-
-            //left mouse click
-            if (mouseState.LeftButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
+            switch (input.getMouseInput())
             {
-                aColor = Color.Black;
-                Rectangle mouseClickArea = new Rectangle(Convert.ToInt32((mouseState.X / cam.Zoom) + cam.Test), Convert.ToInt32((mouseState.Y / cam.Zoom) + cam.Test2), Convert.ToInt32(20 / cam.Zoom), Convert.ToInt32(20 / cam.Zoom));
+                case 1:
+                    aColor = Color.Black;
+                    Rectangle mouseClickArea = new Rectangle(cam.camera_World_ConversionX(input.MousePositionX), cam.camera_World_ConversionY(input.MousePositionY), Convert.ToInt32(20 / cam.Zoom), Convert.ToInt32(20 / cam.Zoom));
                 
-                Rectangle textureRectangle = new Rectangle(Convert.ToInt32(mouseTexturePosition.X),Convert.ToInt32(mouseTexturePosition.Y),aTexture.Width,aTexture.Height);
-                if (mouseClickArea.Intersects(textureRectangle))
-                {
-                    mouseTexturePosition.X = (mouseState.X/cam.Zoom) + cam.Test;
-                    mouseTexturePosition.Y = mouseState.Y/cam.Zoom + cam.Test2;
-                }
+                    Rectangle textureRectangle = new Rectangle(Convert.ToInt32(mouseTexturePosition.X),Convert.ToInt32(mouseTexturePosition.Y),aTexture.Width,aTexture.Height);
+                    if (mouseClickArea.Intersects(textureRectangle))
+                    {
+                        mouseTexturePosition.X = cam.camera_World_ConversionX(input.MousePositionX);
+                        mouseTexturePosition.Y = cam.camera_World_ConversionY(input.MousePositionY);
+                    }
+                    break;
+                case 2:
+                    anotherColor = Color.Black;
+                    break;
+                case 3:
+                    yetAnotherColor = Color.Black;
+                    break;
+                default:
+                    aColor = Color.Red;
+                    anotherColor = Color.Red;
+                    yetAnotherColor = Color.Red;
+                    break;
             }
-            //right mouse click
-            else if (mouseState.RightButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
-            {
-                anotherColor = Color.Black;
-            }
-            //both right mouse button and left mouse button
-            else if (mouseState.RightButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Pressed)
-            {
-                yetAnotherColor = Color.Black;
-            }
-            else
-            {
-                aColor = Color.Red;
-                anotherColor = Color.Red;
-                yetAnotherColor = Color.Red;
-            }
+           
         }
 
         protected override void Draw(GameTime gameTime)
@@ -162,20 +157,18 @@ namespace AStart
             spriteBatch.Draw(aTexture, mouseTexturePosition, Color.Black);
             spriteBatch.End();
 
-            SpriteBatch testBatch = new SpriteBatch(GraphicsDevice);
+            //SpriteBatch testBatch = new SpriteBatch(GraphicsDevice);
             //testBatch.Begin();
             //testBatch.DrawString(Font1,
                                 //"Mouse X value = " + Convert.ToInt32((mouseState.X / cam.Zoom)) +
-                                 
-                                //"| Test = " + cam.Test +
-                                //"| Mouse X + Test =" + Convert.ToInt32((mouseState.X / cam.Zoom) + cam.Test) +
+                                //"| Test = " + cam.CameraOffsetX +
+                                //"| Mouse X + Test =" + Convert.ToInt32((mouseState.X / cam.Zoom) + cam.CameraOffsetX) +
                                 //"| Mouse Y = " + Convert.ToInt32((mouseState.Y / cam.Zoom)) +
-                                //"| Test2 = " + cam.Test2 +
-                                //"| Mouse Y + Test 2 = " + Convert.ToInt32((mouseState.Y / cam.Zoom) + cam.Test2),
+                                //"| Test2 = " + cam.CameraOffsetY +
+                                //"| Mouse Y + Test 2 = " + Convert.ToInt32((mouseState.Y / cam.Zoom) + cam.CameraOffsetY),
                                 //new Vector2(100, 100),
                                 //Color.Black);
             //testBatch.End();
-
 
             base.Draw(gameTime);
         }

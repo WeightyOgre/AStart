@@ -9,7 +9,50 @@ namespace AStart
     class Input
     {
         KeyboardState currentKeyboardState;
-        
+
+        MouseState mouseState;
+
+        //gets the mouse X position
+        public int MousePositionX
+        {
+            get { return mouseState.X; }
+            
+        }
+
+        //gets the mouse Y position
+        public int MousePositionY
+        {
+            get { return mouseState.Y; }
+
+        }
+
+        public int getMouseInput()
+        {
+
+            mouseState = Mouse.GetState();
+
+            //left mouse button click
+            if (mouseState.LeftButton == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
+            {
+                return 1;
+            }
+            //right mouse button click
+            else if (mouseState.RightButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released)
+            {
+                return 2;
+            }
+            //both mouse button click
+            else if (mouseState.RightButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }
+            
+        }
+
         public int getCameraInput()
         {
             currentKeyboardState = Keyboard.GetState();
