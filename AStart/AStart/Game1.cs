@@ -101,8 +101,7 @@ namespace AStart
             }
             
             cam.moveCamera(input.getCameraInput());
-            
-                       
+                      
             updateMouse();
 
             base.Update(gameTime);
@@ -117,6 +116,7 @@ namespace AStart
                     Rectangle mouseClickArea = new Rectangle(cam.camera_World_ConversionX(input.MousePositionX), cam.camera_World_ConversionY(input.MousePositionY), Convert.ToInt32(20 / cam.Zoom), Convert.ToInt32(20 / cam.Zoom));
                 
                     Rectangle textureRectangle = new Rectangle(Convert.ToInt32(mouseTexturePosition.X),Convert.ToInt32(mouseTexturePosition.Y),aTexture.Width,aTexture.Height);
+                    
                     if (mouseClickArea.Intersects(textureRectangle))
                     {
                         mouseTexturePosition.X = cam.camera_World_ConversionX(input.MousePositionX);
